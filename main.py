@@ -139,6 +139,44 @@ class Maze:
             for cell in column:
                 cell.visited = False
 
+    def solve(self):
+        directions = [(0, 1), (-1, 0), (1, 0), (0, -1)]
+
+        def _solve(x, y):
+            self._animate()
+            self.cells[x][y].visited = True
+
+            if x == self.cols - 1 and y == self.rows - 1:
+                return True
+
+            next_moves = [
+                (x + d[0], y + d[1])
+                for d in directions
+                if 0 <= x + d[0] < self.cols and 0 <= y + d[1] < self.rows
+                if not self.cells[x + d[0]][y + d[1]].visited
+            ]
+
+            if not next_moves:
+                return False
+
+            for next_x, next_y in next_moves:
+                if self.cells[x][y].r_wall and next_x == x + 1:
+                    continue
+                if self.cells[x][y].l_wall and next_x == x - 1:
+                    continue
+                if self.cells[x][y].b_wall and next_y == y + 1:
+                    continue
+                if self.cells[x][y].t_wall and next_y == y - 1:
+                    continue
+
+                self.cells[x][y].draw_move(self.cells[next_x][next_y])
+                if _solve(next_x, next_y):
+                    return True
+                else:
+                    self.cells[x][y].draw_move(self.cells[next_x][next_y], undo=True)
+
+        _solve(0, 0)
+
 
 class Window:
     def __init__(self, width=400, height=400):
