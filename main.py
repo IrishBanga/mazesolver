@@ -134,6 +134,11 @@ class Maze:
 
             self._break_walls(next_x, next_y)
 
+    def _reset_visited(self):
+        for column in self.cells:
+            for cell in column:
+                cell.visited = False
+
 
 class Window:
     def __init__(self, width=400, height=400):
