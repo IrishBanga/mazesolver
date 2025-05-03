@@ -18,6 +18,33 @@ class Line:
         )
 
 
+class Cell:
+    def __init__(
+        self, l_top: Point, r_bottom: Point, l_wall, r_wall, t_wall, b_wall, window
+    ):
+        self.l_top = l_top
+        self.r_bottom = r_bottom
+        self.l_wall = l_wall
+        self.r_wall = r_wall
+        self.t_wall = t_wall
+        self.b_wall = b_wall
+        self.lines = []
+        self.window = window
+
+    def draw(self, l_top: Point, r_bottom: Point):
+        if self.l_wall:
+            self.lines.append(Line(l_top, Point(l_top.x, r_bottom.y)))
+        if self.r_wall:
+            self.lines.append(Line(Point(r_bottom.x, l_top.y), r_bottom))
+        if self.t_wall:
+            self.lines.append(Line(l_top, Point(r_bottom.x, l_top.y)))
+        if self.b_wall:
+            self.lines.append(Line(Point(l_top.x, r_bottom.y), r_bottom))
+
+        for line in self.lines:
+            self.window.draw_line(line, "black")
+
+
 class Window:
     def __init__(self, width=400, height=400):
 
