@@ -44,6 +44,19 @@ class Cell:
         for line in self.lines:
             self.window.draw_line(line, "black")
 
+    def draw_move(self, dest_cell, undo=False):
+        fill_color = "red" if undo else "gray"
+        start = Point(
+            (self.l_top.x + self.r_bottom.x) / 2, (self.l_top.y + self.r_bottom.y) / 2
+        )
+        end = Point(
+            (dest_cell.l_top.x + dest_cell.r_bottom.x) / 2,
+            (dest_cell.l_top.y + dest_cell.r_bottom.y) / 2,
+        )
+
+        line = Line(start, end)
+        self.window.draw_line(line, fill_color)
+
 
 class Window:
     def __init__(self, width=400, height=400):
