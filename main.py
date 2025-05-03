@@ -1,12 +1,30 @@
 from tkinter import Tk, BOTH, Canvas
 
 
+class Point:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+
+class Line:
+    def __init__(self, start: Point, end: Point):
+        self.start = start
+        self.end = end
+
+    def draw(self, canvas: Canvas, fill_color="black"):
+        canvas.create_line(
+            self.start.x, self.start.y, self.end.x, self.end.y, fill=fill_color, width=2
+        )
+
+
 class Window:
     def __init__(self, width=400, height=400):
 
         self.__root = Tk()
         self.__root.geometry(f"{width}x{height}")
         self.__root.title("Maze Solver")
+        self.__root.resizable(False, False)
 
         self.canvas = Canvas(self.__root, bg="white")
         self.canvas.pack(fill=BOTH, expand=True)
@@ -25,6 +43,9 @@ class Window:
 
     def close(self):
         self.running = False
+
+    def draw_line(self, line: Line, fill_colour):
+        line.draw(self.canvas, fill_colour)
 
 
 def main():
