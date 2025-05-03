@@ -80,7 +80,13 @@ class Maze:
                     self.x + i * self.cell_width, self.y + j * self.cell_height
                 )
                 r_bottom = Point(l_top.x + self.cell_width, l_top.y + self.cell_height)
-                cell = Cell(l_top, r_bottom, True, True, True, True, self.window)
+                if i == 0 and j == 0:
+                    cell = Cell(l_top, r_bottom, True, True, False, True, self.window)
+                elif i == self.cols - 1 and j == self.rows - 1:
+                    cell = Cell(l_top, r_bottom, True, True, True, False, self.window)
+                else:
+                    cell = Cell(l_top, r_bottom, True, True, True, True, self.window)
+
                 column.append(cell)
             self.cells.append(column)
 
