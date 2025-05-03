@@ -1,4 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
+import time
 
 
 class Point:
@@ -56,6 +57,42 @@ class Cell:
 
         line = Line(start, end)
         self.window.draw_line(line, fill_color)
+
+
+class Maze:
+    def __init__(self, x, y, rows, cols, cell_width, cell_height, window=None):
+        self.x = x
+        self.y = y
+        self.rows = rows
+        self.cols = cols
+        self.cell_width = cell_width
+        self.cell_height = cell_height
+        self.window = window
+
+        self.cells = []
+        self._create_cells()
+
+    def _create_cells(self):
+        for i in range(self.cols):
+            column = []
+            for j in range(self.rows):
+                l_top = Point(
+                    self.x + i * self.cell_width, self.y + j * self.cell_height
+                )
+                r_bottom = Point(l_top.x + self.cell_width, l_top.y + self.cell_height)
+                cell = Cell(l_top, r_bottom, True, True, True, True, self.window)
+                column.append(cell)
+            self.cells.append(column)
+
+    def _draw_cells(self):
+        for column in self.cells:
+            for cell in column:
+                cell.draw(cell.l_top, cell.r_bottom)
+                self._animate()
+
+    def _animate(self):
+        self.window.redraw()
+        time.sleep(0.05)
 
 
 class Window:
