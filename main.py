@@ -1,5 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
-import time
+import time, random
 
 
 class Point:
@@ -29,6 +29,7 @@ class Cell:
         self.r_wall = r_wall
         self.t_wall = t_wall
         self.b_wall = b_wall
+        self.visited = False
         self.lines = []
         self.window = window
 
@@ -99,6 +100,39 @@ class Maze:
     def _animate(self):
         self.window.redraw()
         time.sleep(0.05)
+
+    def _break_walls(self, x, y):
+        self.cells[x][y].visited = True
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        while True:
+            next_moves = [
+                (x + d[0], y + d[1])
+                for d in directions
+                if 0 <= x + d[0] < self.cols and 0 <= y + d[1] < self.rows
+                if not self.cells[x + d[0]][y + d[1]].visited
+            ]
+
+            if not next_moves:
+                return
+
+            next_x, next_y = random.choice(next_moves)
+
+            diff_x = next_x - x
+            diff_y = next_y - y
+            if diff_x == 1:
+                self.cells[x][y].r_wall = False
+                self.cells[next_x][next_y].l_wall = False
+            elif diff_x == -1:
+                self.cells[x][y].l_wall = False
+                self.cells[next_x][next_y].r_wall = False
+            elif diff_y == 1:
+                self.cells[x][y].b_wall = False
+                self.cells[next_x][next_y].t_wall = False
+            elif diff_y == -1:
+                self.cells[x][y].t_wall = False
+                self.cells[next_x][next_y].b_wall = False
+
+            self._break_walls(next_x, next_y)
 
 
 class Window:
