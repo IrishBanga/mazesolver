@@ -210,6 +210,17 @@ class Window:
 
 def main():
     win = Window(800, 600)
+    random.seed(time.time())
+    rows = random.randint(7, 22)
+    cols = random.randint(7, 22)
+    cell_size = 25
+    maze_start_x = (800 - cols * cell_size) // 2
+    maze_start_y = (600 - rows * cell_size) // 2
+    maze = Maze(maze_start_x, maze_start_y, rows, cols, cell_size, cell_size, win)
+    maze._break_walls(0, 0)
+    maze._reset_visited()
+    maze._draw_cells()
+    maze.solve()
     win.wait_for_close()
 
 
